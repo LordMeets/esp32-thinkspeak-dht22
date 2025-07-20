@@ -1,33 +1,40 @@
-# ESP32 + DHT22 + ThingSpeak
+# Proyecto: Monitoreo y Automatización con ESP32, DHT22 y ThingSpeak
 
-Este proyecto muestra cómo enviar datos de temperatura y humedad desde un ESP32 utilizando el sensor DHT22 hacia una cuenta de [ThingSpeak](https://thingspeak.com/), para visualización en la nube.
+Este proyecto permite medir temperatura y humedad desde un ESP32 con sensor DHT22, enviar los datos a ThingSpeak y, en su versión avanzada, controlar luces y ventiladores mediante relés.
 
 ## 🔧 Componentes
 
 - ESP32
 - Sensor DHT22
+- Módulo de 3 relés
 - Conexión Wi-Fi
 - Cuenta en ThingSpeak
 
-## ⚙️ Funcionamiento
+## 📁 Versiones del código
 
-1. El ESP32 se conecta a la red Wi-Fi configurada.
-2. Cada 20 segundos:
-   - Lee la temperatura y humedad desde el sensor DHT22.
-   - Envía los datos a ThingSpeak (campos 1 y 2).
+### 🟢 `basico/`
+- Lee temperatura y humedad
+- Envia datos a ThingSpeak cada 20 segundos
 
-## 📦 Código
+### 🔵 `avanzado/`
+- Lee sensor + sincroniza hora por NTP
+- Maneja 3 relés:
+  - Luz de cultivo (encendida entre 17:00 y 13:00)
+  - 2 ventiladores activados si temperatura > 29.6 °C o humedad > 70%
+- Envía a ThingSpeak:
+  - Campo 1: estado ("Hora obtenida" o "Fallo seguro")
+  - Campo 2: temperatura
+  - Campo 3: humedad
 
-El archivo `sensor_thingspeak.ino` contiene:
+## 🧠 Lógica de fallo seguro
 
-- Configuración de Wi-Fi
-- Lectura del sensor
-- Envío de datos a ThingSpeak
-- Salida por monitor serial para depuración
+Si el ESP32 no logra obtener la hora por NTP:
+- Enciende automáticamente la luz de cultivo
+- Envía un mensaje de “Fallo seguro” a ThingSpeak
 
-## 📊 Ejemplo de canal ThingSpeak
+## 📊 Visualización
 
-> 🔗 [Link al canal público (si querés compartirlo)](https://thingspeak.com/channels/XXXXXX)
+Los datos se visualizan en un canal de ThingSpeak (configurable).
 
 ## 🧑‍💻 Autor
 
